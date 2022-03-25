@@ -10,20 +10,41 @@ public class JavaFormatter{
     public JavaFormatter(){
         fileManager = new FileManager();
         inputScanner = new Scanner(System.in);
-        promptForFile();
+        fileManager.promptForFile();
+        promptForInput();
     }
 
-    // Gets a file input from user, adds to list of opened files
-    public void promptForFile(){
-        System.out.println("Please type the name of the file you wish to have formatted:\n");
-        if(fileManager.openFile(inputScanner.nextLine())){
-            System.out.println("File opened successfully.");
-        }
-        else{
-            System.out.println("File failed to open.");
+    // polls user for input, decides next action based on that.
+    private void promptForInput(){
+        boolean done = false;
+
+        while(!done){
+            System.out.println("What would you like to do with your files?");
+            System.out.println(" 1. autoformat        -- af");
+            System.out.println(" 2. rename variables  -- rfv");
+            System.out.println(" -- ");
+
+            String userInput = inputScanner.nextLine();
+
+            switch(userInput){
+                case "af":
+                    done = true;
+                    break;
+                case "AF":
+                    done = true;
+                    break;
+                case "autoformat":
+                    done = true;
+                    break;
+                default:
+                    System.out.println("Please enter a valid input.");
+            }
         }
     }
-    
+
+    public void formatFiles(){
+        
+    }
 
 
 }

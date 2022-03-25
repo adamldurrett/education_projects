@@ -1,21 +1,24 @@
 import java.util.*;
 import java.io.*;
 
-public class FileManager {
 
-    ArrayList<File> fileList;
-    private int current_file;
-    private Scanner fileScanner;
+public class FileManager{
+
+    ArrayList<Scanner> fileList;
+    private Scanner inputScanner;
 
     public FileManager(){
-        fileList = new ArrayList<File>();
+        inputScanner = new Scanner(System.in);
+        fileList = new ArrayList<Scanner>();
     }
 
+    // opens a file and loads it into the fileList 
+    // return true if works, false otherwise
     public boolean openFile(String fileName){
         try{
             File newFile = new File(fileName);
             Scanner newScan = new Scanner(newFile);
-            fileList.add(newFile);
+            fileList.add(newScan);
             return true;
         }
         catch(FileNotFoundException e){
@@ -24,24 +27,40 @@ public class FileManager {
         }
     }
 
-    private void changeFileIndex(String fileName){
-        File found_file = null;
-
-        for(File file : fileList){
-            if(file.getName() == fileName){
-                found_file = file;
+    // Gets a file input from user, adds to list of opened files
+    public void promptForFile(){
+        boolean done = false;
+        String input;
+        // user is adding files to the list
+        while(!done){
+            System.out.println("Please type the name of the file you wish to have formatted:\n");
+            input = inputScanner.nextLine();
+            if(openFile(input)){
+                System.out.println("File opened successfully.");
             }
-        }
+            else{
+                System.out.println("File failed to open.");
+            }
 
-        if(found_file != null){
-            current_file = fileList.indexOf(found_file);
-            System.out.println("Changed focus to file :" + ((Integer)current_file).toString() + " named " + fileName);
+            // continually add new files until user says no
+            System.out.println("Would you like to input another file?");
+            input = inputScanner.nextLine();
+            // We don't want a new file.
+            if(input.equals("no") || input.equals("No") || input.equals("NO") || input.equals("n")){
+                done = true;
+            }
+            
+        }   
+    }
+
+
+    // returns next line in file, null if there isn't one
+    public String getNextLine(Scanner file){
+        if(file.hasNext()){
+            return(file.nextLine());
         }
         else{
-            System.out.println("Unable to find file named " + fileName);
+            return(null);
         }
-    }
-    public String getNextLine(){
-        return("");
     }
 }
